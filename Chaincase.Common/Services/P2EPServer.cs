@@ -22,7 +22,7 @@ namespace Chaincase.Common.Services
 			Global = global;
 			Listener = new HttpListener();
 			Listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
-			Listener.Prefixes.Add($"http://+:37129/");
+			Listener.Prefixes.Add($"http://*:37129/");
 		}
 
 		public override async Task StartAsync(CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace Chaincase.Common.Services
 			//	await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
 			//}
 			ServiceId = TorManager.CreateHiddenServiceAsync();
-
+			
 			//await TorControlClient.ConnectAsync().ConfigureAwait(false);
 			//await TorControlClient.AuthenticateAsync("MyLittlePonny").ConfigureAwait(false);
 
@@ -44,7 +44,7 @@ namespace Chaincase.Common.Services
 		public override async Task StopAsync(CancellationToken cancellationToken)
 		{
 			await base.StopAsync(cancellationToken).ConfigureAwait(false);
-			Listener.Stop();
+			Listener.Stop();	
 			var serviceId = ServiceId;
 			if (!string.IsNullOrWhiteSpace(serviceId))
 			{

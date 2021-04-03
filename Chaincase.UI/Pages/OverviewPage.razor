@@ -16,14 +16,14 @@
         <IonImg style="box-sizing: content-box; margin: 0 auto; padding: 10vw; width: 20vw;"
                 src='@($"_content/Chaincase.UI/img/chaincase-white-theme-mark.svg")' />
         <h1 class="ion-text-center">₿ <strong>@ViewModel.Balance</strong></h1>
-        <div class="overview-header__buttons">
-            <IonChip>
-                <IonIcon name="paper-plane"/>
-                <IonLabel>Send</IonLabel>
+        <div class="center-chips">
+            <IonChip color="light">
+                <IonIcon color="light" name="paper-plane"/>
+                <IonLabel color="light">Send</IonLabel>
             </IonChip>
-            <IonChip outline color="dark">
-                <IonIcon name="qr-code"/>
-                <IonLabel>Receive</IonLabel>
+            <IonChip outline color="light">
+                <IonIcon color="light" name="qr-code"/>
+                <IonLabel color="light">Receive</IonLabel>
             </IonChip>
         </div>
     </div>

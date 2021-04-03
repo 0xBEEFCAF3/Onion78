@@ -61,17 +61,23 @@ ion-button:not(.in-toolbar).button-disabled {
 }
 
 .overview-header {
-    color: var(--ion-color-light);
+    color: var(--ion-color-primary-contrast);
     background: var(--ion-color-primary);
 }
 
-.overview-header__buttons {
+.center-chips {
+    color: var(--ion-color-primary-contrast);
+    border-color: var(--ion-color-primary-contrast);
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.center-chips ion-chip {
+    --color: var(--ion-color-primary-contrast);
 }
 
 .overview-header__buttons > * {

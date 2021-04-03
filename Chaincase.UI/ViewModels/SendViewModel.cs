@@ -191,6 +191,10 @@ namespace Chaincase.UI.ViewModels
                     // of binding to a calculated ObservableAsPropertyHelper
                     AmountText = url.Amount.ToString();
                 }
+                if (url.UnknowParameters.TryGetValue("pj", out var endPoint))
+                {
+                    PayjoinEndPoint = endPoint;
+                }
                 // we could check url.Label or url.Message for contact, but there is
                 // no convention on their use yet so it's hard to say whether they
                 // identify the sender or receiver. We care about the recipient only here.
@@ -389,6 +393,16 @@ namespace Chaincase.UI.ViewModels
         public BitcoinUrlBuilder Url => _destinationUrl.Value;
 
         public BitcoinAddress Address => _destinationUrl.Value?.Address;
+
+        public string PayjoinEndPoint
+        {
+            get
+            {
+                string endPoint = null;
+                _destinationUrl.Value?.UnknowParameters?.TryGetValue("pj", out endPoint);
+                return endPoint;
+            }
+        }
 
         public Money OutputAmount => _outputAmount.Value;
 

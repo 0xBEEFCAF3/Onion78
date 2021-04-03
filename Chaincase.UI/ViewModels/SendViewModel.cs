@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using BTCPayServer.BIP78.Sender;
 using Chaincase.Common;
 using NBitcoin;
 using NBitcoin.Payment;
@@ -18,6 +18,7 @@ using WalletWasabi.Blockchain.Transactions;
 using WalletWasabi.Exceptions;
 using WalletWasabi.Helpers;
 using WalletWasabi.Logging;
+using WalletWasabi.WebClients.PayJoin;
 
 namespace Chaincase.UI.ViewModels
 {
@@ -359,7 +360,8 @@ namespace Chaincase.UI.ViewModels
                     intent,
                     feeStrategy,
                     allowUnconfirmed: true,
-                    allowedInputs: selectedCoinReferences));
+                    allowedInputs: selectedCoinReferences,
+                    GetPayjoinClient()));
                 SmartTransaction signedTransaction = result.Transaction;
                 SignedTransaction = signedTransaction;
 
@@ -385,7 +387,32 @@ namespace Chaincase.UI.ViewModels
             return false;
         }
 
-        private PayjoinClient 
+        private IPayjoinClient? GetPayjoinClient()
+        {
+            if (!string.IsNullOrWhiteSpace(PayjoinEndPoint) &&
+                Uri.IsWellFormedUriString(PayjoinEndPoint, UriKind.Absolute))
+            {
+                var payjoinEndPointUri = new Uri(PayjoinEndPoint);
+                if (!Global.Config.UseTor)
+                {
+                    if (payjoinEndPointUri.DnsSafeHost.EndsWith(".onion", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Logger.LogWarning("PayJoin server is an onion service but Tor is disabled. Ignoring...");
+                        return null;
+                    }
+
+                    if (Global.Config.Network == Network.Main && payjoinEndPointUri.Scheme != Uri.UriSchemeHttps)
+                    {
+                        Logger.LogWarning("PayJoin server is not exposed as an onion service nor https. Ignoring...");
+                        return null;
+                    }
+                }
+
+                return new PayjoinClient(payjoinEndPointUri, Global.Config.TorSocks5EndPoint);
+            }
+
+            return null;
+        }
 
         public BitcoinUrlBuilder Url => _destinationUrl.Value;
 

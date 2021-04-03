@@ -47,13 +47,6 @@
       <_ContentIncludedByDefault Remove="wwwroot\theme\theme.css" />
       <_ContentIncludedByDefault Remove="wwwroot\theme\theme.js" />
     </ItemGroup>
-    <ItemGroup>
-      <Content Remove="wwwroot\img\chaincase-dark-theme-vertical-logomark.svg" />
-      <Content Remove="wwwroot\img\chaincase-dark-theme-mark.svg" />
-      <Content Remove="wwwroot\img\chaincase-white-theme-mark.svg" />
-      <Content Remove="wwwroot\img\chaincase-light-theme-vertical-logomark.svg" />
-      <Content Remove="wwwroot\img\chaincase-light-theme-mark.svg" />
-    </ItemGroup>
     <PropertyGroup>
         <!-- File with mtime of last successful npm install -->
         <NpmInstallStampFile>node_modules/.install-stamp</NpmInstallStampFile>

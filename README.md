@@ -20,13 +20,13 @@ Mobile bitcoin wallet applications are *NOT* private enough for both the *sender
 Our project aims to implement the payjoin standard (BIP-78) and privacy features (TOR Hidden Services) into an existing mobile wallet application (Chaincase). The ease of accessability and portability of a mobile based platform is a benefit to those who are attempting to remain as private as possible. 
 
 ## Problems Faced
-1. *Signing Coordination* - Transactions that require additional privacy tended to require lots of cooridnation between the transaction participants. 
+1. **Signing Coordination** - Transactions that require additional privacy tended to require lots of cooridnation between the transaction participants. 
 
-2. *Signer & Receiver Communication* - Transmitting this information in a private and secure manner has traditionally been a challenge for bitcoin transactions.  
+2. **Signer & Receiver Communication** - Transmitting this information in a private and secure manner has traditionally been a challenge for bitcoin transactions.  
 
-3. *Transaction Confidentiality* - Out of band communications and broadcasting of data can be noisy and raise flags when once is trying to transact privately. 
+3. **Transaction Confidentiality** - Out of band communications and broadcasting of data can be noisy and raise flags when once is trying to transact privately. 
 
-4. *Hackathon [META]* - How can we work remotely as a team on the same project and meet our deliverabiles within 24 hours?
+4. **Hackathon Team [META]** - How can we work remotely as a team on the same project and meet our deliverabiles within 24 hours?
 
 ## Solution(s)
 1. Onion '78
@@ -36,16 +36,16 @@ Our project aims to implement the payjoin standard (BIP-78) and privacy features
 3. Payjoin
     - Many spends to one transaction
     - Extra data means more privacy
-4. Project Management! 
-    - Lots of calls
-    - Status checks
-    - Delegation of Responsibilities
-    - Knowing when to call it 
+4. Project Management 
+    - Lots of impromptu check-in calls
+    - Scheduled status checks
+    - Delegation of responsibilities
+    - Knowing when to "call it" on a feature or enhancement 
 
 ## Technical Requirements / Milestones
-1. [DONE] - Send and receive transactions according to the payjoin standard (BIP78)
-2. [DONE] - Open a ephemeral tor hidden service for every new PSBT negotiation phase
-3. [STRETCH][NOT DONE] - Alongside Tor also offer NFC as a form of offline communication between two parties
+1. <span style="color:green">[DONE]</span> - Send and receive transactions according to the payjoin standard (BIP78)
+2. <span style="color:green">[DONE]</span> - Open a ephemeral tor hidden service for every new PSBT negotiation phase
+3. [STRETCH]<span style="color:red">[NOT_DONE]</span> - Alongside Tor also offer NFC as a form of offline communication between two parties
 
 ## Mobile Wallet - Chaincase
 A non-custodial iOS bitcoin wallet supporting [Chaumian CoinJoin](https://github.com/nopara73/ZeroLink/#ii-chaumian-coinjoin).

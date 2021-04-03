@@ -9,16 +9,41 @@
 @inherits ReactiveComponentBase<ReceiveViewModel>
 
 <IonContent class="ion-padding">
-    <p style="width: 256px; height: 256px; margin: auto">
-        <QRCode Data="@ViewModel.BitcoinUri"></QRCode>
-    </p>
+    <IonSegment style="margin:10px 5px 10px 5px;" Color="primary" @bind-Value="@ViewModel.ReceiveType">
+        <IonSegmentButton value="@ViewModel.PayJoinValue">
+            <IonLabel>PayJoin</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton value="@ViewModel.DefaultRecieveAddress">
+            <IonLabel>Regular Transaction</IonLabel>
+        </IonSegmentButton>
+    </IonSegment>
 
-
+    <IonLabel>Label</IonLabel>
     <p>@ViewModel.AppliedLabel</p>
-    <IonLabel>Address</IonLabel>
-    <IonText @onclick="@(async () => await CopyToClipboardAsync(ViewModel.Address))">
-        <p>@ViewModel.Address</p>
-    </IonText>
+
+    <IonLabel>Amount</IonLabel>
+    <p>@ViewModel.ProposedAmount</p>
+    @if (ViewModel.ReceiveType == ViewModel.PayJoinValue)
+    {
+        <IonLabel>PayJoin Recieve Address</IonLabel> <br />
+        <IonNote>Click To Copy!</IonNote> <br />
+        <IonNote>Send This to the reciever</IonNote>
+        <IonText @onclick="@(async () => await CopyToClipboardAsync(ViewModel.P2EPUri))">
+            <p>@ViewModel.P2EPUri</p>
+        </IonText>
+    }
+    else
+    {
+        <p style="width: 256px; height: 256px; margin: auto">
+            <QRCode Data="@ViewModel.BitcoinUri"></QRCode>
+        </p>
+        <IonLabel>Recieve Address</IonLabel> <br />
+        <IonNote>Click To Copy!</IonNote>
+        <IonText @onclick="@(async () => await CopyToClipboardAsync(ViewModel.Address))">
+            <p>@ViewModel.Address</p>
+        </IonText>
+    }
+
     <IonButton OnClick="ShareLink" expand="block">SHARE LINK</IonButton>
     <IonButton href="/overview" expand="block">DONE</IonButton>
     <ClipboardToast @bind-Visible="@IsToastVisible" />
@@ -26,11 +51,15 @@
 
 @code {
     private bool IsToastVisible;
-
+    
     protected override void OnInitialized()
     {
         ViewModel = ReceiveViewModel;
         UiStateService.Title = "RECEIVE";
+    }
+
+    private string IsPayJoiningValue() {
+        return ViewModel.IsPayJoining ? ViewModel.PayJoinValue : ViewModel.DefaultRecieveAddress;
     }
 
     private async Task ShareLink() {
@@ -42,4 +71,6 @@
         await Clipboard.Copy(toCopy);
         IsToastVisible = true;
     }
+
+    
 }

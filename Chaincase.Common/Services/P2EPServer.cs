@@ -16,6 +16,7 @@ namespace Chaincase.Common.Services
 		public string ServiceId { get; private set; }
 		public Global Global { get; }
 		public string PaymentEndpoint => $"http://{ServiceId}.onion:37129";
+		public bool HiddenServiceIsOn { get; private set; }
 
 		public P2EPServer(Global global)
 		{
@@ -33,6 +34,7 @@ namespace Chaincase.Common.Services
 			//	await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
 			//}
 			ServiceId = TorManager.CreateHiddenServiceAsync();
+			HiddenServiceIsOn = true;
 			
 			//await TorControlClient.ConnectAsync().ConfigureAwait(false);
 			//await TorControlClient.AuthenticateAsync("MyLittlePonny").ConfigureAwait(false);
@@ -49,6 +51,7 @@ namespace Chaincase.Common.Services
 			if (!string.IsNullOrWhiteSpace(serviceId))
 			{
 				TorManager.DestroyHiddenServiceAsync(serviceId);
+				HiddenServiceIsOn = false;
 			}
 		}
 
@@ -88,7 +91,7 @@ namespace Chaincase.Common.Services
 					{
 						response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
 					}
-					response.ContentType = "text/html; charset=UTF-8";
+					//response.ContentType = "text/html; charset=UTF-8";
 					response.Close();
 				}
 				catch (OperationCanceledException)

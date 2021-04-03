@@ -2,16 +2,16 @@
 ## Onion '78 - A Payjoin Implementation Over TOR
 
 # Resources
-TBD: Links, PDFs, video 
-Presentation - 
-Axure  - 
-Video Demo - 
+TBD: Links, PDFs, video   
+Presentation -   
+Axure  -   
+Video Demo -   
 
 ## Team '78
-@DanGould
-@armins88
-@johnsBeharry
-@ronaldstoner
+@DanGould  
+@armins88  
+@johnsBeharry  
+@ronaldstoner   
 
 ## Problem
 Mobile bitcoin wallet applications are *NOT* private enough for both the *sender* as well as the *receiver*. 

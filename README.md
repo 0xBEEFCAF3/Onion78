@@ -46,10 +46,18 @@ Our project aims to implement the payjoin standard (BIP-78) and privacy features
     - Delegation of responsibilities
     - Knowing when to "call it" on a feature or enhancement 
 
-## Technical Requirements / Milestones
+## Technical Requirements / Goals
 1. <span style="color:green">[DONE]</span> - Send and receive transactions according to the payjoin standard (BIP78)
 2. <span style="color:green">[DONE]</span> - Open a ephemeral tor hidden service for every new PSBT negotiation phase
 3. [STRETCH]<span style="color:red">[NOT_DONE]</span> - Alongside Tor also offer NFC as a form of offline communication between two parties
+
+## Milestones
+1. <span style="color:green">[DONE]</span> - Create and Destroy a Tor Hidden service reliably
+2. <span style="color:green">[DONE]</span> - Implement both payjoin receiver and sender (PSBT logic, automatic coin selection, and fee estimations)
+3. <span style="color:green">[DONE]</span> - Facilitate communication between receiver and sender (construct valid HTTP requests, listen for incoming requests via Tor, authentication of requests? )
+4. <span style="color:green">[DONE]</span> - Create UI for both the payjoin receiver and sender
+5. <span style="color:green">[DONE]</span> - Verify the validity of the final txn and broadcast
+6. [STRETCH] Automate coin selection based on clustering for optimal privacy
 
 ## Mobile Wallet - Chaincase
 A non-custodial iOS bitcoin wallet supporting [Chaumian CoinJoin](https://github.com/nopara73/ZeroLink/#ii-chaumian-coinjoin).

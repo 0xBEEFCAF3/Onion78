@@ -12,6 +12,15 @@
         <IonLabel position="stacked">Add Label</IonLabel>
         <IonInput @bind-Value="@ViewModel.ProposedLabel" placeholder="Who are you receiving from?" />
     </IonItem>
+    <IonItem class="ion-padding">
+        <IonLabel position="stacked">Amount</IonLabel>
+        <IonInput @bind-Value="@ViewModel.ProposedAmount" placeholder="How much are you requesting?" />
+    </IonItem>
+    @*<IonItem class="ion-padding">
+        <IonLabel position="stacked">Enable Payjoin</IonLabel>
+        <IonNote>You need to keep this app open until the payment is received</IonNote>
+        <IonToggle @bind-Value="@ViewModel.IsPayJoining" />
+    </IonItem>*@
     <IonCard color="primary">
         <IonCardContent>
             <strong>Info:</strong>
@@ -31,7 +40,7 @@
         UiStateService.Title = "RECEIVE BITCOIN";
     }
 
-    private bool IsContinueDisabled => ViewModel.ProposedLabel.IsNullOrWhiteSpace();
+    private bool IsContinueDisabled => ViewModel.ProposedLabel.IsNullOrWhiteSpace() && ViewModel.ProposedAmount > 0 ;
 
     private void ApplyLabel()
     {

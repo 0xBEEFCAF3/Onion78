@@ -50,7 +50,6 @@ namespace Chaincase.Common
         public TransactionBroadcaster TransactionBroadcaster { get; set; }
         public CoinJoinProcessor CoinJoinProcessor { get; set; }
         public Node RegTestMempoolServingNode { get; private set; }
-        public P2EPServer P2EPServer { get; private set; }
         public ITorManager TorManager { get; private set; }
         public INotificationManager NotificationManager { get; private set; }
 
@@ -96,7 +95,6 @@ namespace Chaincase.Common
                     Path.Combine(DataDir, "BitcoinStore"), Network,
                     indexStore, new AllTransactionStore(), new MempoolService()
                 );
-                P2EPServer = new P2EPServer(this);
             }
         }
 
@@ -155,10 +153,6 @@ namespace Chaincase.Common
                 {
                     await TorManager.StartAsync(ensureRunning: false, DataDir);
                     Logger.LogInfo($"{nameof(TorManager)} is initialized.");
-                    var cts = new CancellationToken();
-                    P2EPServer.StartAsync(cts);
-                    Logger.LogInfo($"P2EP Server listening created: {P2EPServer.PaymentEndpoint}");
-
                 }
 
                 Logger.LogInfo($"Global.InitializeNoWalletAsync():{nameof(TorManager)} is initialized.");

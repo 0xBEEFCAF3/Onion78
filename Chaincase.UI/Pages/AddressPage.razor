@@ -20,12 +20,15 @@
 
     <IonLabel>Label</IonLabel>
     <p>@ViewModel.AppliedLabel</p>
+
+    <IonLabel>Amount</IonLabel>
+    <p>@ViewModel.ProposedAmount</p>
     @if (ViewModel.ReceiveType == ViewModel.PayJoinValue)
     {
         <IonLabel>PayJoin Recieve Address</IonLabel> <br />
         <IonNote>Click To Copy!</IonNote> <br />
         <IonNote>Send This to the reciever</IonNote>
-        <IonText @onclick="@(async () => await CopyToClipboardAsync(ViewModel.P2EPAddress))">
+        <IonText @onclick="@(async () => await CopyToClipboardAsync(ViewModel.P2EPUri))">
             <p>@ViewModel.P2EPUri</p>
         </IonText>
     }
@@ -68,4 +71,6 @@
         await Clipboard.Copy(toCopy);
         IsToastVisible = true;
     }
+
+    
 }

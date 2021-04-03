@@ -91,7 +91,7 @@ namespace Chaincase.Common.Services
 					{
 						response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
 					}
-					response.ContentType = "text/html; charset=UTF-8";
+					//response.ContentType = "text/html; charset=UTF-8";
 					response.Close();
 				}
 				catch (OperationCanceledException)

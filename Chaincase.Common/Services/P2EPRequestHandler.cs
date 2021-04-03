@@ -53,7 +53,7 @@ namespace Chaincase.Common.Services
 				input.WitScript = WitScript.Empty;
 			}
 			// Get prv key for signature 
-			var serverCoinKey = toUse.KeyManager.GetSecrets("", toUse.coin.ScriptPubKey).First();
+			var serverCoinKey = toUse.KeyManager.GetSecrets("chaincase", toUse.coin.ScriptPubKey).First();
 			var serverCoin = toUse.coin.GetCoin();
 
 			paymentTx.Inputs.Add(serverCoin.Outpoint);

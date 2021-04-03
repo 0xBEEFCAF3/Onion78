@@ -46,7 +46,7 @@ namespace Chaincase.UI.ViewModels
 
         public string BitcoinUri => $"bitcoin:{Address}";
 
-        public string P2EPUri => $"bitcoin:{Address}?pj={P2EPServer.PaymentEndpoint}&amountparam={ProposedAmount}&message={ProposedLabel}";
+        public string P2EPUri => $"bitcoin:{Address}?pj={P2EPServer.PaymentEndpoint}&amount={ProposedAmount}";
 
         public void Dispose() {
             if (P2EPServer.HiddenServiceIsOn) {
@@ -56,10 +56,10 @@ namespace Chaincase.UI.ViewModels
         }
 
         public void GenerateP2EP() {
-            StartPayjoin();
-            if (P2EPServer.HiddenServiceIsOn) {
-                P2EPAddress = P2EPServer.PaymentEndpoint;
+            if (!P2EPServer.HiddenServiceIsOn) {
+                StartPayjoin();
             }
+            P2EPAddress = P2EPServer.PaymentEndpoint;
         }
 
         public void StartPayjoin() {

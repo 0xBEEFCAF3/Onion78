@@ -159,13 +159,13 @@ namespace Chaincase.UI.ViewModels
                 .ToProperty(this, nameof(Url));
 
             var isTransactionOkToSign = this.WhenAnyValue(
-                x => x.Label, x => x.Address, x => x.OutputAmount,
+                x => x.Label, x => x.OutputAmount,
                 x => x.SelectCoinsViewModel.SelectedAmount,
                 x => x.EstimatedBtcFee,
-            (label, address, outputAmount, selectedAmount, feeAmount) =>
+            (label, outputAmount, selectedAmount, feeAmount) =>
             {
                 return label.NotNullAndNotEmpty()
-                    && address is not null
+                    && this.Address is not null
                     && outputAmount > Money.Zero
                     && outputAmount + feeAmount <= selectedAmount;
 
@@ -174,7 +174,7 @@ namespace Chaincase.UI.ViewModels
             _isTransactionOkToSign = isTransactionOkToSign
                 .ToProperty(this, x => x.IsTransactionOkToSign);
 
-            SendTransactionCommand = ReactiveCommand.CreateFromTask<string, bool>(SendTransaction, isTransactionOkToSign);
+            SendTransactionCommand = ReactiveCommand.CreateFromTask<string, bool>(SendTransaction);
         }
 
         internal BitcoinUrlBuilder ParseDestinationString(string destinationString)

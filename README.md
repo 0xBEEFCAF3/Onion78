@@ -8,7 +8,7 @@
 # Resources
 TBD: Links, PDFs, video   
 Presentation -   
-Axure  -   
+Figma PoC Mockup - https://www.figma.com/file/FM4jE85Aybr6fT00tyNhWc/Untitled?node-id=0%3A1   
 Video Demo -   
 
 ## Team '78

@@ -1,11 +1,11 @@
 # MIT 2021 Bitcoin Hackathon
-## Onion '78 - A Payjoin Implementation Over TOR
+# Onion '78 - A Payjoin Implementation Over TOR
 
 <p align="center">
   <img src="https://github.com/armins88/chaincase/raw/readme_update/images/poster.jpg?raw=true" width="300"> 
 </p>
 
-# Resources
+## Resources
 TBD: Links, PDFs, video   
 Presentation -   
 Figma PoC Mockup - https://www.figma.com/file/FM4jE85Aybr6fT00tyNhWc/Untitled?node-id=0%3A1   

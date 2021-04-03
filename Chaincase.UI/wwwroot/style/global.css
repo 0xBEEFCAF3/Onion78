@@ -61,9 +61,13 @@ ion-button:not(.in-toolbar).button-disabled {
 }
 
 .overview-header {
-    color: var(--ion-color-light);
+    color: var(--ion-color-primary-contrast);
     background: var(--ion-color-primary);
 }
+
+/*.overview-header * {
+    color: var(--ion-color-light);
+}*/
 
 .overview-header__buttons {
     display: flex;
@@ -124,7 +128,7 @@ ion-button:not(.in-toolbar).button-disabled {
   --ion-color-secondary-tint: #ffa31a;
 
 
-    --ion-background-color: #F2F2F3;
+  --ion-background-color: #F2F2F3;
   --ion-background-color-rgb: 242,242,243;
 
   --ion-text-color: #222222;

@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
+using System.Net.Http;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Chaincase.Common;
 using NBitcoin;
-using ReactiveUI;
-using Splat;
-using WalletWasabi.Blockchain.Analysis.FeesEstimation;
-using WalletWasabi.Blockchain.TransactionOutputs;
-using WalletWasabi.Helpers;
-using Chaincase.UI.Services;
 using NBitcoin.Payment;
-using WalletWasabi.Logging;
-using WalletWasabi.Blockchain.Transactions;
-using System.Threading.Tasks;
+using ReactiveUI;
 using WalletWasabi.Blockchain.Analysis.Clustering;
+using WalletWasabi.Blockchain.Analysis.FeesEstimation;
 using WalletWasabi.Blockchain.TransactionBuilding;
+using WalletWasabi.Blockchain.TransactionOutputs;
+using WalletWasabi.Blockchain.Transactions;
 using WalletWasabi.Exceptions;
+using WalletWasabi.Helpers;
+using WalletWasabi.Logging;
+using WalletWasabi.WebClients.PayJoin;
 
 namespace Chaincase.UI.ViewModels
 {
-    public class SendViewModel : ReactiveObject
+	public class SendViewModel : ReactiveObject
     {
         protected Global Global { get; }
 
@@ -160,13 +159,13 @@ namespace Chaincase.UI.ViewModels
                 .ToProperty(this, nameof(Url));
 
             var isTransactionOkToSign = this.WhenAnyValue(
-                x => x.Label, x => x.Address, x => x.OutputAmount,
+                x => x.Label, x => x.OutputAmount,
                 x => x.SelectCoinsViewModel.SelectedAmount,
                 x => x.EstimatedBtcFee,
-            (label, address, outputAmount, selectedAmount, feeAmount) =>
+            (label, outputAmount, selectedAmount, feeAmount) =>
             {
                 return label.NotNullAndNotEmpty()
-                    && address is not null
+                    && this.Address is not null
                     && outputAmount > Money.Zero
                     && outputAmount + feeAmount <= selectedAmount;
 
@@ -175,7 +174,7 @@ namespace Chaincase.UI.ViewModels
             _isTransactionOkToSign = isTransactionOkToSign
                 .ToProperty(this, x => x.IsTransactionOkToSign);
 
-            SendTransactionCommand = ReactiveCommand.CreateFromTask<string, bool>(SendTransaction, isTransactionOkToSign);
+            SendTransactionCommand = ReactiveCommand.CreateFromTask<string, bool>(SendTransaction);
         }
 
         internal BitcoinUrlBuilder ParseDestinationString(string destinationString)
@@ -191,6 +190,7 @@ namespace Chaincase.UI.ViewModels
                     // of binding to a calculated ObservableAsPropertyHelper
                     AmountText = url.Amount.ToString();
                 }
+
                 // we could check url.Label or url.Message for contact, but there is
                 // no convention on their use yet so it's hard to say whether they
                 // identify the sender or receiver. We care about the recipient only here.
@@ -360,7 +360,8 @@ namespace Chaincase.UI.ViewModels
                     intent,
                     feeStrategy,
                     allowUnconfirmed: true,
-                    allowedInputs: selectedCoinReferences));
+                    allowedInputs: selectedCoinReferences,
+                    GetPayjoinClient()));
                 SmartTransaction signedTransaction = result.Transaction;
                 SignedTransaction = signedTransaction;
 
@@ -386,9 +387,46 @@ namespace Chaincase.UI.ViewModels
             return false;
         }
 
+        private IPayjoinClient? GetPayjoinClient()
+        {
+            if (!string.IsNullOrWhiteSpace(PayjoinEndPoint) &&
+                Uri.IsWellFormedUriString(PayjoinEndPoint, UriKind.Absolute))
+            {
+                var payjoinEndPointUri = new Uri(PayjoinEndPoint);
+                if (!Global.Config.UseTor)
+                {
+                    if (payjoinEndPointUri.DnsSafeHost.EndsWith(".onion", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Logger.LogWarning("PayJoin server is an onion service but Tor is disabled. Ignoring...");
+                        return null;
+                    }
+
+                    if (Global.Config.Network == Network.Main && payjoinEndPointUri.Scheme != Uri.UriSchemeHttps)
+                    {
+                        Logger.LogWarning("PayJoin server is not exposed as an onion service nor https. Ignoring...");
+                        return null;
+                    }
+                }
+
+                return new PayjoinClient(payjoinEndPointUri, Global.Config.TorSocks5EndPoint);
+            }
+
+            return null;
+        }
+
         public BitcoinUrlBuilder Url => _destinationUrl.Value;
 
         public BitcoinAddress Address => _destinationUrl.Value?.Address;
+
+        public string PayjoinEndPoint
+        {
+            get
+            {
+                string endPoint = null;
+                _destinationUrl.Value?.UnknowParameters?.TryGetValue("pj", out endPoint);
+                return endPoint;
+            }
+        }
 
         public Money OutputAmount => _outputAmount.Value;
 

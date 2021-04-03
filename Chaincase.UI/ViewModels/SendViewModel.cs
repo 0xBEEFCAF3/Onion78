@@ -1,29 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using BTCPayServer.BIP78.Sender;
 using Chaincase.Common;
 using NBitcoin;
-using ReactiveUI;
-using Splat;
-using WalletWasabi.Blockchain.Analysis.FeesEstimation;
-using WalletWasabi.Blockchain.TransactionOutputs;
-using WalletWasabi.Helpers;
-using Chaincase.UI.Services;
 using NBitcoin.Payment;
-using WalletWasabi.Logging;
-using WalletWasabi.Blockchain.Transactions;
-using System.Threading.Tasks;
+using ReactiveUI;
 using WalletWasabi.Blockchain.Analysis.Clustering;
+using WalletWasabi.Blockchain.Analysis.FeesEstimation;
 using WalletWasabi.Blockchain.TransactionBuilding;
+using WalletWasabi.Blockchain.TransactionOutputs;
+using WalletWasabi.Blockchain.Transactions;
 using WalletWasabi.Exceptions;
+using WalletWasabi.Helpers;
+using WalletWasabi.Logging;
 
 namespace Chaincase.UI.ViewModels
 {
-    public class SendViewModel : ReactiveObject
+	public class SendViewModel : ReactiveObject
     {
         protected Global Global { get; }
 
@@ -191,10 +189,7 @@ namespace Chaincase.UI.ViewModels
                     // of binding to a calculated ObservableAsPropertyHelper
                     AmountText = url.Amount.ToString();
                 }
-                if (url.UnknowParameters.TryGetValue("pj", out var endPoint))
-                {
-                    PayjoinEndPoint = endPoint;
-                }
+
                 // we could check url.Label or url.Message for contact, but there is
                 // no convention on their use yet so it's hard to say whether they
                 // identify the sender or receiver. We care about the recipient only here.
@@ -389,6 +384,8 @@ namespace Chaincase.UI.ViewModels
             }
             return false;
         }
+
+        private PayjoinClient 
 
         public BitcoinUrlBuilder Url => _destinationUrl.Value;
 

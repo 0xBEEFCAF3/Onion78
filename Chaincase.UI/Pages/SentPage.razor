@@ -1,19 +1,25 @@
 ﻿@page "/send/sent"
+@using Chaincase.Common.Contracts
 @using Chaincase.UI.Services
 @inject UIStateService UiStateService
 @inject StackService StackService
 @inject NavigationManager NavigationManager
 @inject SendViewModel SendViewModel
+@inject IClipboard Clipboard
 @inherits ReactiveComponentBase<SendViewModel>
 
 
 <IonContent class="ion-padding">
+    <ClipboardToast @bind-Visible="@IsToastVisible" />
     <IonIcon class="ion-text-center" size="large" name="paper-plane-outline"></IonIcon>
     <p class="ion-text-center">₿ @ViewModel.AmountText</p>
-    <p class="ion-text-center">To @ViewModel.DestinationString</p>
-    <p class="ion-text-center">@ViewModel.SignedTransaction.GetHash().ToString()</p>
+    <p class="ion-text-center" @onclick="@(async () => await CopyToClipboardAsync(ViewModel.DestinationString))">
+        To @ViewModel.DestinationString
+    </p>
+    <p class="ion-text-center" @onclick="@(async () => await CopyToClipboardAsync(TxId))">
+        @TxId
+    </p>
     <p class="ion-text-center">It usually takes about 30 minutes for a transaction to be finalized.</p>
-
 </IonContent>
 <IonFooter class="ion-padding">
     <IonButton OnClick="@ClickDone" expand="block">DONE</IonButton>
@@ -21,10 +27,19 @@
 
 @code {
 
+    public bool IsToastVisible;
+    public string TxId => ViewModel.SignedTransaction.GetHash().ToString();
+
     protected override void OnInitialized()
     {
         ViewModel = SendViewModel;
         UiStateService.Title = "SENT";
+    }
+
+    private async Task CopyToClipboardAsync(string toCopy)
+    {
+        await Clipboard.Copy(toCopy);
+        IsToastVisible = true;
     }
 
     private void ClickDone()

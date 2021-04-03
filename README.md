@@ -47,7 +47,7 @@ Our project aims to implement the payjoin standard (BIP-78) and privacy features
 2. [DONE] - Open a ephemeral tor hidden service for every new PSBT negotiation phase
 3. [STRETCH][NOT DONE] - Alongside Tor also offer NFC as a form of offline communication between two parties
 
-## Mobile Wallet - Chainchase
+## Mobile Wallet - Chaincase
 A non-custodial iOS bitcoin wallet supporting [Chaumian CoinJoin](https://github.com/nopara73/ZeroLink/#ii-chaumian-coinjoin).
 
 ## Building for iOS

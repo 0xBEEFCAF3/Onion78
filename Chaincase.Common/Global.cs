@@ -52,6 +52,8 @@ namespace Chaincase.Common
         public Node RegTestMempoolServingNode { get; private set; }
         public ITorManager TorManager { get; private set; }
         public INotificationManager NotificationManager { get; private set; }
+        public P2EPServer P2EPServer { get; private set; }
+
 
         public HostedServices HostedServices { get; }
 
@@ -95,6 +97,7 @@ namespace Chaincase.Common
                     Path.Combine(DataDir, "BitcoinStore"), Network,
                     indexStore, new AllTransactionStore(), new MempoolService()
                 );
+                P2EPServer = new P2EPServer(this);
             }
         }
 
@@ -477,6 +480,10 @@ namespace Chaincase.Common
                     else if (incoming > Money.Zero)
                     {
                         NotifyAndLog($"{amountString} BTC", "Receive Confirmed", NotificationType.Information, e);
+                        if (P2EPServer.HiddenServiceIsOn) {
+                            var cts = new CancellationToken();
+                            P2EPServer.StopAsync(cts);
+                        }
                     }
                     else if (incoming < Money.Zero)
                     {

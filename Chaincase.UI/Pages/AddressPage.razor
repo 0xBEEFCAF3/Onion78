@@ -9,7 +9,7 @@
 @inherits ReactiveComponentBase<ReceiveViewModel>
 
 <IonContent class="ion-padding">
-    <IonSegment style="margin:10px 5px 10px 5px;" Color="primary" @bind-Value="@ViewModel.ReceiveType">
+    <IonSegment style="margin:10px 5px 10px 5px;" color="success" @bind-Value="@ViewModel.ReceiveType">
         <IonSegmentButton value="@ViewModel.PayJoinValue">
             <IonLabel>PayJoin</IonLabel>
         </IonSegmentButton>
@@ -18,19 +18,31 @@
         </IonSegmentButton>
     </IonSegment>
 
-    <IonLabel>Label</IonLabel>
-    <p>@ViewModel.AppliedLabel</p>
-
-    <IonLabel>Amount</IonLabel>
-    <p>@ViewModel.ProposedAmount</p>
     @if (ViewModel.ReceiveType == ViewModel.PayJoinValue)
     {
         <IonLabel>PayJoin Recieve Address</IonLabel> <br />
-        <IonNote>Click To Copy!</IonNote> <br />
-        <IonNote>Send This to the reciever</IonNote>
-        <IonText @onclick="@(async () => await CopyToClipboardAsync(ViewModel.P2EPUri))">
-            <p>@ViewModel.P2EPUri</p>
-        </IonText>
+        <IonTextArea style="padding:5px; border:1px solid" disabled>
+            @ViewModel.P2EPUri
+        </IonTextArea>
+        <div style="display:flex; justify-content:space-around;">
+            <IonButton @onclick="@(async () => await CopyToClipboardAsync(ViewModel.P2EPUri))">Copy</IonButton>
+            <IonButton OnClick="ShareP2EPLink" expand="block">Share</IonButton>
+        </div>
+        <IonList>
+            <IonListHeader>
+                <IonLabel>
+                    Receive Details
+                </IonLabel>
+            </IonListHeader>
+            <IonItem>
+                <IonLabel>Amount</IonLabel>
+                <IonBadge color="secondary" slot="end">₿ @ViewModel.ProposedAmount</IonBadge>
+            </IonItem>
+            <IonItem>
+                <IonLabel>Lable</IonLabel>
+                <IonBadge slot="end">@ViewModel.AppliedLabel</IonBadge>
+            </IonItem>
+        </IonList>
     }
     else
     {
@@ -42,16 +54,16 @@
         <IonText @onclick="@(async () => await CopyToClipboardAsync(ViewModel.Address))">
             <p>@ViewModel.Address</p>
         </IonText>
-    }
+        <IonButton OnClick="ShareLink" expand="block">SHARE LINK</IonButton>
 
-    <IonButton OnClick="ShareLink" expand="block">SHARE LINK</IonButton>
+    }
     <IonButton href="/overview" expand="block">DONE</IonButton>
     <ClipboardToast @bind-Visible="@IsToastVisible" />
 </IonContent>
 
 @code {
     private bool IsToastVisible;
-    
+
     protected override void OnInitialized()
     {
         ViewModel = ReceiveViewModel;
@@ -66,11 +78,15 @@
         await Share.ShareText(ViewModel.BitcoinUri);
     }
 
+    private async Task ShareP2EPLink() {
+        await Share.ShareText(ViewModel.P2EPUri);
+    }
+
     private async Task CopyToClipboardAsync(string toCopy)
     {
         await Clipboard.Copy(toCopy);
         IsToastVisible = true;
     }
 
-    
+
 }

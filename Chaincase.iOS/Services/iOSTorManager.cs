@@ -284,12 +284,19 @@ namespace Chaincase.iOS.Services
         }
 
         public string CreateHiddenServiceAsync() {
+            
             EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
             string serviceId = "";
             TorController.SendCommand(new NSString("ADD_ONION"),
                 new string[] { "NEW:BEST", "Port=37129,37129", "Flags=DiscardPK" },
                 null, (keys, values, _) => {
-                    serviceId = values[0].ToString().Split('=')[1];
+
+                    var keyValuePair = values[0].ToString().Split('=');
+                    if (keyValuePair.Length < 2) {
+                        ewh.Set();
+                        return false;
+                    }
+                    serviceId = keyValuePair[1];
                     ewh.Set();
                     return true;
                 });

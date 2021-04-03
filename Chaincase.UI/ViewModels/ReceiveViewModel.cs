@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.ComponentModel;
+using System.Threading;
 using Chaincase.Common;
 using Chaincase.Common.Services;
 using ReactiveUI;
@@ -7,7 +8,7 @@ using WalletWasabi.Logging;
 
 namespace Chaincase.UI.ViewModels
 {
-    public class ReceiveViewModel : ReactiveObject
+    public class ReceiveViewModel : ReactiveObject, INotifyPropertyChanged
     {
         protected Global Global { get; }
         public string PayJoinValue = "pj";
@@ -20,13 +21,10 @@ namespace Chaincase.UI.ViewModels
         private bool _isPayJoining = true;
         private string _receiveType = "pj";
         private string _p2epAddress;
-        public P2EPServer P2EPServer { get; private set; }
-
 
         public ReceiveViewModel(Global global)
         {
             Global = global;
-            P2EPServer = new P2EPServer(global);
             GenerateP2EP();
         }
 
@@ -46,26 +44,19 @@ namespace Chaincase.UI.ViewModels
 
         public string BitcoinUri => $"bitcoin:{Address}";
 
-        public string P2EPUri => $"bitcoin:{Address}?pj={P2EPServer.PaymentEndpoint}&amount={ProposedAmount}";
-
-        public void Dispose() {
-            if (P2EPServer.HiddenServiceIsOn) {
-                var cts = new CancellationToken();
-                P2EPServer.StopAsync(cts);
-            }
-        }
+        public string P2EPUri => $"bitcoin:{Address}?pj={Global.P2EPServer.PaymentEndpoint}&amount={ProposedAmount}";
 
         public void GenerateP2EP() {
-            if (!P2EPServer.HiddenServiceIsOn) {
+            if (!Global.P2EPServer.HiddenServiceIsOn) {
                 StartPayjoin();
             }
-            P2EPAddress = P2EPServer.PaymentEndpoint;
+            P2EPAddress = Global.P2EPServer.PaymentEndpoint;
         }
 
         public void StartPayjoin() {
             var cts = new CancellationToken();
-            P2EPServer.StartAsync(cts);
-            Logger.LogInfo($"P2EP Server listening created: {P2EPServer.PaymentEndpoint}");
+            Global.P2EPServer.StartAsync(cts);
+            Logger.LogInfo($"P2EP Server listening created: {Global.P2EPServer.PaymentEndpoint}");
         }
 
         public string ProposedLabel

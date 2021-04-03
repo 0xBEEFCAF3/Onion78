@@ -24,7 +24,7 @@ Mobile bitcoin wallet applications are *NOT* private enough for both the *sender
 Our project aims to implement the payjoin standard (BIP-78) and privacy features (TOR Hidden Services) into an existing mobile wallet application (Chaincase). A mobile wallet was selected due to it's ease of accessability and portability, providing a benefit to those who are attempting to remain as private as possible with as little footprint as possible, anywhere in the world. This software should be able to be be executed and used on a variety of Apple iOS and Google Android devices.  
 
 ## Problems Faced
-1. **Signing Coordination** - Transactions that require additional privacy tended to require lots of cooridnation between the transaction participants. 
+1. **Signing Coordination** - Transactions that require additional privacy tended to require lots of coordination between the transaction participants.
 
 2. **Signer & Receiver Communication** - Transmitting this information in a private and secure manner has traditionally been a challenge for bitcoin transactions.  
 

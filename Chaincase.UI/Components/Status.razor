@@ -28,7 +28,15 @@
     @if (ViewModel.ProgressPercent != 100)
     {
         <IonItem>
-            <IonProgressBar value="@ViewModel.ProgressPercent"/>
+            <IonProgressBar value="@ViewModel.ProgressPercent" />
+        </IonItem>
+    }
+    @if (ViewModel.HiddenServiceIsOn)
+    {
+        <IonItem>
+            <IonLabel>Hidden Service Expiration</IonLabel>
+            <IonBadge slot="end">@ViewModel.HiddenServiceTimeLeft</IonBadge>
+
         </IonItem>
     }
 

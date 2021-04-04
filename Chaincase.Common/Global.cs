@@ -53,6 +53,7 @@ namespace Chaincase.Common
         public ITorManager TorManager { get; private set; }
         public INotificationManager NotificationManager { get; private set; }
         public P2EPServer P2EPServer { get; private set; }
+        public P2EPTimer P2EPTimer { get; private set; }
 
 
         public HostedServices HostedServices { get; }
@@ -98,6 +99,7 @@ namespace Chaincase.Common
                     indexStore, new AllTransactionStore(), new MempoolService()
                 );
                 P2EPServer = new P2EPServer(this);
+                P2EPTimer = new P2EPTimer(this);
             }
         }
 

@@ -65,16 +65,19 @@ ion-button:not(.in-toolbar).button-disabled {
     background: var(--ion-color-primary);
 }
 
+<<<<<<< HEAD
 .center-chips {
     color: var(--ion-color-primary-contrast);
     border-color: var(--ion-color-primary-contrast);
-  }
+||||||| a998b3f19
 .overview-header__buttons {
+=======
 /*.overview-header * {
     color: var(--ion-color-light);
 }*/
 
 .overview-header__buttons {
+>>>>>>> 14a19eb66b5cd0e4bef351c28e362862f2887f23
     display: flex;
     flex-direction: row;
     justify-content: center;

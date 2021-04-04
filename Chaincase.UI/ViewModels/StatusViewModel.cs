@@ -38,6 +38,8 @@ namespace Chaincase.UI.ViewModels
         private ObservableAsPropertyHelper<string> _status;
         private bool _downloadingBlock;
         private StatusSet ActiveStatuses { get; }
+        private string _hiddenServiceExpiration;
+
 
         public StatusViewModel(Global global)
         {
@@ -48,6 +50,18 @@ namespace Chaincase.UI.ViewModels
             BtcPrice = "$0";
             ActiveStatuses = new StatusSet();
             UseTor = Global.Config.UseTor; // Do not make it dynamic, because if you change this config settings only next time will it activate.
+
+            Observable.Interval(TimeSpan.FromSeconds(1))
+               .ObserveOn(RxApp.MainThreadScheduler)
+               .Subscribe(_ =>
+               {
+                   TimeSpan t = TimeSpan.FromMilliseconds(TimeLeft);
+                   HiddenServiceTimeLeft = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                                t.Hours,
+                                t.Minutes,
+                                t.Seconds,
+                                t.Milliseconds);
+               });
 
             _status = ActiveStatuses.WhenAnyValue(x => x.CurrentStatus)
                 .Select(x => x.ToString())
@@ -199,6 +213,10 @@ namespace Chaincase.UI.ViewModels
                 });
         }
 
+        private double TimeLeft => Global.P2EPTimer.GetTimeLeft();
+
+        public bool HiddenServiceIsOn => Global.P2EPServer.HiddenServiceIsOn;
+
         public void OnInitialized(object sender, EventArgs args)
         {
             var nodes = Global.Nodes.ConnectedNodes;
@@ -289,6 +307,12 @@ namespace Chaincase.UI.ViewModels
         {
             get => _downloadingBlock;
             set => this.RaiseAndSetIfChanged(ref _downloadingBlock, value);
+        }
+
+        public string HiddenServiceTimeLeft
+        {
+            get => _hiddenServiceExpiration;
+            set => this.RaiseAndSetIfChanged(ref _hiddenServiceExpiration, value);
         }
 
         public void TryAddStatus(StatusType status, ushort percentage = 0)

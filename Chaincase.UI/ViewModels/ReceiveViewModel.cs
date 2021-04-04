@@ -45,6 +45,7 @@ namespace Chaincase.UI.ViewModels
 
         public void InitNextReceiveKey()
         {
+            if (ProposedLabel == null) ProposedLabel = "";
             ReceivePubKey = Global.Wallet.KeyManager.GetNextReceiveKey(ProposedLabel, out bool minGapLimitIncreased);
             ProposedLabel = "";
         }
@@ -66,7 +67,7 @@ namespace Chaincase.UI.ViewModels
         public void GenerateP2EP() {
             if (!Global.P2EPServer.HiddenServiceIsOn) {
                 StartPayjoin();
-                Global.P2EPTimer.StartTimer(10000); // 3 min
+                Global.P2EPTimer.StartTimer(180000); // 3 min
             }
             P2EPAddress = Global.P2EPServer.PaymentEndpoint;
         }

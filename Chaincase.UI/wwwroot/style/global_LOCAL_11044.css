@@ -68,10 +68,6 @@ ion-button:not(.in-toolbar).button-disabled {
 .center-chips {
     color: var(--ion-color-primary-contrast);
     border-color: var(--ion-color-primary-contrast);
-}
-
-.overview-header__buttons {
-    color: var(--ion-color-light);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -134,7 +130,7 @@ ion-button:not(.in-toolbar).button-disabled {
   --ion-color-secondary-tint: #f0bb4f;
 
 
-  --ion-background-color: #F2F2F3;
+    --ion-background-color: #F2F2F3;
   --ion-background-color-rgb: 242,242,243;
 
   --ion-text-color: #222222;

@@ -8,27 +8,43 @@
 @inject IShare Share
 @inherits ReactiveComponentBase<ReceiveViewModel>
 
-<IonContent class="ion-padding">
-    <IonSegment style="margin:10px 5px 10px 5px;" color="success" @bind-Value="@ViewModel.ReceiveType">
-        <IonSegmentButton value="@ViewModel.PayJoinValue">
+<IonContent>
+    <IonSegment class="ion-padding" @bind-Value="@ViewModel.ReceiveType">
+        <IonSegmentButton value="@ViewModel.PayJoinValue" layout="icon-start">
+            <IonIcon name="shuffle"></IonIcon>
             <IonLabel>PayJoin</IonLabel>
         </IonSegmentButton>
-        <IonSegmentButton value="@ViewModel.DefaultRecieveAddress">
-            <IonLabel>Regular Transaction</IonLabel>
+        <IonSegmentButton value="@ViewModel.DefaultRecieveAddress" layout="icon-end">
+            <IonIcon name="sad-outline"></IonIcon>
+            <IonLabel>Legacy Transaction</IonLabel>
         </IonSegmentButton>
     </IonSegment>
 
     @if (ViewModel.ReceiveType == ViewModel.PayJoinValue)
     {
-        <IonLabel>PayJoin Recieve Address</IonLabel> <br />
-        <IonTextArea style="padding:5px; border:1px solid" disabled>
-            @ViewModel.P2EPUri
-        </IonTextArea>
-        <div style="display:flex; justify-content:space-around;">
-            <IonButton @onclick="@(async () => await CopyToClipboardAsync(ViewModel.P2EPUri))">Copy</IonButton>
-            <IonButton OnClick="ShareP2EPLink" expand="block">Share</IonButton>
+        <p class="ion-padding" style="width: 256px; height: 256px; margin: auto">
+            <QRCode Data="@ViewModel.P2EPUri"></QRCode>
+        </p>
+
+        <div class="ion-padding">
+        <IonLabel class="ion-padding">
+            <p class="ion-text-center">
+                @ViewModel.P2EPUri
+            </p>
+        </IonLabel>
         </div>
-        <IonList>
+
+        <div class="ion-padding" style="display:flex; justify-content: center;">
+            <IonChip @onclick="@(async () => await CopyToClipboardAsync(ViewModel.P2EPUri))" color="primary">
+                <ion-icon name="copy-outline"></ion-icon>
+                <IonLabel>Copy</IonLabel>
+            </IonChip>
+            <IonChip @onclick="ShareP2EPLink" color="primary">
+                <ion-icon name="share-outline"></ion-icon>
+                <IonLabel>Share</IonLabel>
+            </IonChip>
+        </div>
+        <IonList class="ion-padding">
             <IonListHeader>
                 <IonLabel>
                     Receive Details
@@ -39,7 +55,7 @@
                 <IonBadge color="secondary" slot="end">₿ @ViewModel.ProposedAmount</IonBadge>
             </IonItem>
             <IonItem>
-                <IonLabel>Lable</IonLabel>
+                <IonLabel>Label</IonLabel>
                 <IonBadge slot="end">@ViewModel.AppliedLabel</IonBadge>
             </IonItem>
             <IonItem>
@@ -61,9 +77,11 @@
         <IonButton OnClick="ShareLink" expand="block">SHARE LINK</IonButton>
 
     }
-    <IonButton href="/overview" expand="block">DONE</IonButton>
     <ClipboardToast @bind-Visible="@IsToastVisible" />
 </IonContent>
+<IonFooter class="ion-padding">
+    <IonButton href="/overview" expand="block">DONE</IonButton>
+</IonFooter>
 
 @code {
     private bool IsToastVisible;

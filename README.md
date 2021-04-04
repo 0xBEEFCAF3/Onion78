@@ -29,7 +29,7 @@ Our project aims to implement the payjoin standard (BIP-78) and privacy features
 
 2. **Signer & Receiver Communication** - Transmitting this information in a private and secure manner has traditionally been a challenge for bitcoin transactions.  
 
-3. **Transaction Confidentiality** - Out-of-band communications and broadcasting of data can be noisy and raise flags when once is trying to transact privately. 
+3. **Transaction Confidentiality** - Out-of-band communications and broadcasting of data can be noisy and raise flags when one is trying to transact privately. 
 
 4. **Hackathon Team [META]** - How can we work remotely as a team on the same project and meet our deliverables within 24 hours?
 

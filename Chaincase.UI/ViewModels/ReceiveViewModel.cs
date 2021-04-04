@@ -30,7 +30,6 @@ namespace Chaincase.UI.ViewModels
         public ReceiveViewModel(Global global)
         {
             Global = global;
-            GenerateP2EP();
             Observable.Interval(TimeSpan.FromSeconds(1))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(_ =>
@@ -46,6 +45,7 @@ namespace Chaincase.UI.ViewModels
 
         public void InitNextReceiveKey()
         {
+            if (ProposedLabel == null) ProposedLabel = "";
             ReceivePubKey = Global.Wallet.KeyManager.GetNextReceiveKey(ProposedLabel, out bool minGapLimitIncreased);
             ProposedLabel = "";
         }

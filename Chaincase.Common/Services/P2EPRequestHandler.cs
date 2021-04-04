@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Chaincase.Common.Contracts;
 using NBitcoin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,16 +16,18 @@ namespace Chaincase.Common.Services
 {
 	public class P2EPRequestHandler
 	{
-		public P2EPRequestHandler(Network network, WalletManager walletManager, int privacyLevelThreshold)
+		public Network Network { get; }
+		public WalletManager WalletManager { get; }
+		public INotificationManager NotificationManager { get; private set; }
+		public int PrivacyLevelThreshold { get; }
+
+		public P2EPRequestHandler(Network network, WalletManager walletManager, int privacyLevelThreshold, INotificationManager notificationManager)
 		{
 			Network = network;
 			WalletManager = walletManager;
 			PrivacyLevelThreshold = privacyLevelThreshold;
+			NotificationManager = notificationManager;
 		}
-
-		public Network Network { get; }
-		public WalletManager WalletManager { get; }
-		public int PrivacyLevelThreshold { get; }
 
 		public Task<string> HandleAsync(string body, CancellationToken cancellationToken)
 		{
@@ -68,6 +71,7 @@ namespace Chaincase.Common.Services
 			serverCoinToSign.Sign(serverCoinKey.PrivateKey);
 			serverCoinToSign.FinalizeInput();
 
+			NotificationManager.ScheduleNotification("PayJoin Received", "The sender has paid you in a CoinJoin style transaction", 1);
 			return Task.FromResult(newPsbt.ToHex());
 		}
 	}

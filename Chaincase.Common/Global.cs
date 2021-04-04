@@ -456,6 +456,7 @@ namespace Chaincase.Common
                         else
                         {
                             NotifyAndLog($"{amountString} BTC", "Received", NotificationType.Success, e);
+                            
                         }
                     }
                     else if (incoming < Money.Zero)

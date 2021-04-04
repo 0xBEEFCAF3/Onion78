@@ -36,11 +36,12 @@
         UiStateService.Title = "RECEIVE BITCOIN";
     }
 
-    private bool IsContinueDisabled => ViewModel.ProposedLabel.IsNullOrWhiteSpace() && ViewModel.ProposedAmount > 0 ;
+    private bool IsContinueDisabled =>  ViewModel.ProposedLabel.IsNullOrWhiteSpace() || ViewModel.ProposedAmount > 0 ;
 
     private void ApplyLabel()
     {
         ViewModel.InitNextReceiveKey();
+        ViewModel.GenerateP2EP();
         NavigationManager.NavigateTo("receive/address");
     }
 

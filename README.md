@@ -36,8 +36,11 @@ Our project aims to implement the payjoin standard (BIP-78) and privacy features
 ## Solution(s)
 1. Onion '78
     - Sender and Receiver functionality 
+    - Increased privacy controls
 2. TOR Hidden Services
     - Removes the need for OOB channels
+    - Private server hosting via mobile device (world to you)
+    - Protects traffic of transaction sender and receiver
 3. Payjoin
     - Many spends to one transaction
     - Extra data means more privacy

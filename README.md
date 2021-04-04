@@ -51,7 +51,7 @@ Our project aims to implement the payjoin standard (BIP-78) and privacy features
     - Knowing when to "call it" on a feature or enhancement 
 
 ## Technical Requirements / Goals
-1. <span style="color:green">[DONE]</span> - Send and receive transactions according to the payjoin standard (BIP78)
+1. <span style="color:green">[DONE]</span> - Send and receive transactions according to the payjoin standard (BIP-78)
 2. <span style="color:green">[DONE]</span> - Open a ephemeral tor hidden service for every new PSBT negotiation phase
 3. [STRETCH]<span style="color:red">[NOT_DONE]</span> - Alongside Tor also offer NFC as a form of offline communication between two parties
 

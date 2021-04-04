@@ -68,13 +68,10 @@ ion-button:not(.in-toolbar).button-disabled {
 .center-chips {
     color: var(--ion-color-primary-contrast);
     border-color: var(--ion-color-primary-contrast);
-  }
-.overview-header__buttons {
-/*.overview-header * {
-    color: var(--ion-color-light);
-}*/
+}
 
 .overview-header__buttons {
+    color: var(--ion-color-light);
     display: flex;
     flex-direction: row;
     justify-content: center;

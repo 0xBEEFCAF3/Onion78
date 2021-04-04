@@ -52,6 +52,7 @@ namespace Chaincase.Common.Services
 			{
 				TorManager.DestroyHiddenServiceAsync(serviceId);
 				HiddenServiceIsOn = false;
+				ServiceId = "";
 			}
 		}
 

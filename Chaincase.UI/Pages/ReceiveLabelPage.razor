@@ -41,6 +41,7 @@
     private void ApplyLabel()
     {
         ViewModel.InitNextReceiveKey();
+        ViewModel.GenerateP2EP();
         NavigationManager.NavigateTo("receive/address");
     }
 

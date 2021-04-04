@@ -30,7 +30,6 @@ namespace Chaincase.UI.ViewModels
         public ReceiveViewModel(Global global)
         {
             Global = global;
-            GenerateP2EP();
             Observable.Interval(TimeSpan.FromSeconds(1))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(_ =>
@@ -67,7 +66,7 @@ namespace Chaincase.UI.ViewModels
         public void GenerateP2EP() {
             if (!Global.P2EPServer.HiddenServiceIsOn) {
                 StartPayjoin();
-                Global.P2EPTimer.StartTimer(180000); // 3 min
+                Global.P2EPTimer.StartTimer(10000); // 3 min
             }
             P2EPAddress = Global.P2EPServer.PaymentEndpoint;
         }

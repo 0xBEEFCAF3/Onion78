@@ -68,10 +68,6 @@ ion-button:not(.in-toolbar).button-disabled {
 .center-chips {
     color: var(--ion-color-primary-contrast);
     border-color: var(--ion-color-primary-contrast);
-}
-
-.overview-header__buttons {
-    color: var(--ion-color-light);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -226,8 +222,8 @@ body.dark {
     --ion-color-medium-shade: #86888f;
     --ion-color-medium-tint: #a2a4ab;
 
-    --ion-color-light: var(--ion-background-color);
-    --ion-color-light-rgb: var(--ion-background-color);
+    --ion-color-light: var(--ion-text-color);
+    --ion-color-light-rgb: var(--ion-text-color);
     --ion-color-light-contrast: #00000;
     --ion-color-light-contrast-rgb: 255,255,255;
     --ion-color-light-shade: var(--ion-background-color);

@@ -10,10 +10,12 @@
 
 <IonContent>
     <IonSegment class="ion-padding" @bind-Value="@ViewModel.ReceiveType">
-        <IonSegmentButton value="@ViewModel.PayJoinValue">
+        <IonSegmentButton value="@ViewModel.PayJoinValue" layout="icon-start">
+            <IonIcon name="shuffle"></IonIcon>
             <IonLabel>PayJoin</IonLabel>
         </IonSegmentButton>
-        <IonSegmentButton value="@ViewModel.DefaultRecieveAddress">
+        <IonSegmentButton value="@ViewModel.DefaultRecieveAddress" layout="icon-end">
+            <IonIcon name="sad-outline"></IonIcon>
             <IonLabel>Legacy Transaction</IonLabel>
         </IonSegmentButton>
     </IonSegment>

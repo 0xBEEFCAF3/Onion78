@@ -8,7 +8,7 @@
 ## Resources
 Presentation -  https://docs.google.com/presentation/d/1RWXk9A7V519o5C2rNhvrHW63b7Iz_Y7oVtujYxDTicI/edit?usp=sharing  
 Figma PoC Mockup - https://www.figma.com/file/FM4jE85Aybr6fT00tyNhWc/Untitled?node-id=0%3A1  
-Video Demo - 
+Video Demo - https://www.youtube.com/watch?v=UsHOQIykfDo
 
 ## Team '78
 @DanGould  

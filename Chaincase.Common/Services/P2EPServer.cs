@@ -18,6 +18,8 @@ namespace Chaincase.Common.Services
 		public string PaymentEndpoint => $"http://{ServiceId}.onion:37129";
 		public bool HiddenServiceIsOn { get; private set; }
 
+		public string Password { private get; set; }
+
 		public P2EPServer(Global global)
 		{
 			Global = global;
@@ -45,6 +47,7 @@ namespace Chaincase.Common.Services
 
 		public override async Task StopAsync(CancellationToken cancellationToken)
 		{
+			Password = null;
 			await base.StopAsync(cancellationToken).ConfigureAwait(false);
 			Listener.Stop();	
 			var serviceId = ServiceId;
@@ -75,7 +78,7 @@ namespace Chaincase.Common.Services
 
 						try
 						{
-							var result = await handler.HandleAsync(body, stoppingToken).ConfigureAwait(false);
+							var result = await handler.HandleAsync(body, stoppingToken, Password).ConfigureAwait(false);
 
 							var output = response.OutputStream;
 							var buffer = Encoding.UTF8.GetBytes(result);

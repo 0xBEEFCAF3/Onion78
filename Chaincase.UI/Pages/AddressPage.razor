@@ -4,34 +4,34 @@
 @inject UIStateService UiStateService
 @inject NavigationManager NavigationManager
 @inject ReceiveViewModel ReceiveViewModel
-@inject IClipboard Clipboard 
+@inject IClipboard Clipboard
 @inject IShare Share
 @inherits ReactiveComponentBase<ReceiveViewModel>
 
 <IonContent>
-    <IonSegment class="ion-padding" @bind-Value="@ViewModel.ReceiveType">
-        <IonSegmentButton value="@ViewModel.PayJoinValue" layout="icon-start">
-            <IonIcon name="shuffle"></IonIcon>
-            <IonLabel>PayJoin</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton value="@ViewModel.DefaultRecieveAddress" layout="icon-end">
-            <IonIcon name="sad-outline"></IonIcon>
-            <IonLabel>Legacy Transaction</IonLabel>
-        </IonSegmentButton>
-    </IonSegment>
-
-    @if (ViewModel.ReceiveType == ViewModel.PayJoinValue)
+    <div class="ion-padding">
+        <IonSegment class="ion-padding" @bind-Value="ReceiveSegment" @onclick="HandleReceiveSegmentClick">
+            <IonSegmentButton value="@SIMPLE">
+                <IonLabel>Simple</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="@PAYJOIN" layout="icon-start">
+                <IonIcon name="shuffle"></IonIcon>
+                <IonLabel>PayJoin</IonLabel>
+            </IonSegmentButton>
+        </IonSegment>
+    </div>
+    @if (ReceiveSegment == PAYJOIN && @ViewModel.IsPayjoinLive)
     {
         <p class="ion-padding" style="width: 256px; height: 256px; margin: auto">
             <QRCode Data="@ViewModel.P2EPUri"></QRCode>
         </p>
 
         <div class="ion-padding">
-        <IonLabel class="ion-padding">
-            <p class="ion-text-center">
-                @ViewModel.P2EPUri
-            </p>
-        </IonLabel>
+            <IonLabel class="ion-padding">
+                <p class="ion-text-center">
+                    @ViewModel.P2EPUri
+                </p>
+            </IonLabel>
         </div>
 
         <div class="ion-padding" style="display:flex; justify-content: center;">
@@ -66,10 +66,12 @@
     }
     else
     {
-        <p style="width: 256px; height: 256px; margin: auto">
+        <p class="ion-padding" style="width: 256px; height: 256px; margin: auto">
             <QRCode Data="@ViewModel.BitcoinUri"></QRCode>
         </p>
-        <IonLabel>Recieve Address</IonLabel> <br />
+        <div class="ion-padding">
+            <IonLabel>Recieve Address</IonLabel>
+        </div>
         <IonNote>Click To Copy!</IonNote>
         <IonText @onclick="@(async () => await CopyToClipboardAsync(ViewModel.Address))">
             <p>@ViewModel.Address</p>
@@ -83,8 +85,44 @@
     <IonButton href="/overview" expand="block">DONE</IonButton>
 </IonFooter>
 
+<IonModal @bind-Visible="IsPasswordModalVisible">
+    <IonHeader>
+        <IonToolbar>
+            <IonTitle>Approve PayJoin</IonTitle>
+            <IonButtons slot="start">
+                <IonButton @onclick="@DontTryPayJoin">Back</IonButton>
+            </IonButtons>
+        </IonToolbar>
+    </IonHeader>
+    <IonContent class="ion-padding">
+        <IonLabel position="stacked">Enter Password</IonLabel>
+        <div class="@(IsShaking ? "shake" : "")">
+            <IonItem>
+                <IonPasswordInput @bind-Value="Password" placeholder="e.g. margaretthatcheris110%SEXY" />
+            </IonItem>
+        </div>
+        <IonCard color="primary">
+            <IonCardContent>
+                <strong>Info:</strong> PayJoin requires your approval to collaborate on the transaction.
+            </IonCardContent>
+        </IonCard>
+        <IonButton @onclick="TryPayJoin" color="primary" expand="block">Get PayJoin Invoice</IonButton>
+        <IonLoading Visible="@ViewModel.IsBusy"></IonLoading>
+    </IonContent>
+</IonModal>
+
 @code {
+
+    private const string SIMPLE = "simple";
+    private const string PAYJOIN = "pj";
+
+    private string ReceiveSegment = SIMPLE;
+    private bool IsShaking;
+    private bool IsPasswordModalVisible;
+    private bool IsPayJoinApproved;
     private bool IsToastVisible;
+
+    private string Password = "";
 
     protected override void OnInitialized()
     {
@@ -92,15 +130,41 @@
         UiStateService.Title = "RECEIVE";
     }
 
-    private string IsPayJoiningValue() {
-        return ViewModel.IsPayJoining ? ViewModel.PayJoinValue : ViewModel.DefaultRecieveAddress;
+    private void HandleReceiveSegmentClick()
+    {
+        if (ReceiveSegment == PAYJOIN && !ViewModel.IsPayjoinLive)
+        {
+            ToggleModal();
+        }
     }
 
-    private async Task ShareLink() {
+    private async Task TryPayJoin()
+    {
+        try
+        {
+            IsShaking = false;
+            await ViewModel.TryStartPayjoin(Password);
+            ToggleModal();
+        }
+        catch (Exception ex)
+        {
+            IsShaking = true;
+        }
+    }
+
+    private void DontTryPayJoin()
+    {
+        IsPasswordModalVisible = false;
+        ReceiveSegment = SIMPLE;
+    }
+
+    private async Task ShareLink()
+    {
         await Share.ShareText(ViewModel.BitcoinUri);
     }
 
-    private async Task ShareP2EPLink() {
+    private async Task ShareP2EPLink()
+    {
         await Share.ShareText(ViewModel.P2EPUri);
     }
 
@@ -110,5 +174,6 @@
         IsToastVisible = true;
     }
 
+    private void ToggleModal() => IsPasswordModalVisible = !IsPasswordModalVisible;
 
 }

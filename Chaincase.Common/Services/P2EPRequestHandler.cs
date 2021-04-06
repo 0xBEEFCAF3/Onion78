@@ -26,7 +26,7 @@ namespace Chaincase.Common.Services
 		public WalletManager WalletManager { get; }
 		public int PrivacyLevelThreshold { get; }
 
-		public Task<string> HandleAsync(string body, CancellationToken cancellationToken)
+		public Task<string> HandleAsync(string body, CancellationToken cancellationToken, string password)
 		{
 			if (!PSBT.TryParse(body, Network, out var psbt))
 			{
@@ -53,7 +53,7 @@ namespace Chaincase.Common.Services
 				input.WitScript = WitScript.Empty;
 			}
 			// Get prv key for signature 
-			var serverCoinKey = toUse.KeyManager.GetSecrets("chaincase", toUse.coin.ScriptPubKey).First();
+			var serverCoinKey = toUse.KeyManager.GetSecrets(password, toUse.coin.ScriptPubKey).First();
 			var serverCoin = toUse.coin.GetCoin();
 
 			paymentTx.Inputs.Add(serverCoin.Outpoint);

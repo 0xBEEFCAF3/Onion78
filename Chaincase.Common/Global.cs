@@ -72,9 +72,9 @@ namespace Chaincase.Common
 
         public Global(INotificationManager notificationManager, ITorManager torManager, IDataDirProvider dataDirProvider)
         {
-	        TorManager = torManager;
-	        NotificationManager = notificationManager;
-	        using (BenchmarkLogger.Measure())
+            TorManager = torManager;
+            NotificationManager = notificationManager;
+            using (BenchmarkLogger.Measure())
             {
                 StoppingCts = new CancellationTokenSource();
                 DataDir = dataDirProvider.Get();
@@ -118,7 +118,7 @@ namespace Chaincase.Common
 
         private CancellationTokenSource StoppingCts { get; set; }
 
-        public async Task InitializeNoWalletAsync(CancellationToken cancellationToken = default) 
+        public async Task InitializeNoWalletAsync(CancellationToken cancellationToken = default)
         {
             AddressManager = null;
             Logger.LogDebug($"Global.InitializeNoWalletAsync(): Waiting for a lock");
@@ -482,7 +482,8 @@ namespace Chaincase.Common
                     else if (incoming > Money.Zero)
                     {
                         NotifyAndLog($"{amountString} BTC", "Receive Confirmed", NotificationType.Information, e);
-                        if (P2EPServer.HiddenServiceIsOn) {
+                        if (P2EPServer.HiddenServiceIsOn)
+                        {
                             var cts = new CancellationToken();
                             P2EPServer.StopAsync(cts);
                         }
@@ -539,12 +540,13 @@ namespace Chaincase.Common
 
         public async Task OnResuming()
         {
+            KeepHiddenServiceAlive.Cancel();
             if (IsResuming)
-			{
+            {
                 Logger.LogDebug($"Global.OnResuming(): SleepCts.Cancel()");
                 SleepCts.Cancel();
                 return;
-			}
+            }
 
             try
             {
@@ -566,7 +568,7 @@ namespace Chaincase.Common
                     var addrManTask = InitializeAddressManagerBehaviorAsync();
                     AddressManagerBehavior addressManagerBehavior = await addrManTask.ConfigureAwait(false);
                     connectionParameters.TemplateBehaviors.Add(addressManagerBehavior);
-                    
+
                     if (TorManager?.State != TorState.Started && TorManager.State != TorState.Connected)
                     {
                         await TorManager.StartAsync(false, DataDir);
@@ -601,7 +603,8 @@ namespace Chaincase.Common
             }
         }
 
-        private protected CancellationTokenSource SleepCts { get;  set; } = new CancellationTokenSource();
+        private protected CancellationTokenSource KeepHiddenServiceAlive { get; set; } = new CancellationTokenSource();
+        private protected CancellationTokenSource SleepCts { get; set; } = new CancellationTokenSource();
         private protected bool IsGoingToSleep = false;
 
         public async Task OnSleeping()
@@ -615,9 +618,22 @@ namespace Chaincase.Common
 
             try
             {
-                Logger.LogDebug($"Global.OnSleeping(): Waiting for a lock");
                 SleepCts.Dispose();
                 SleepCts = new CancellationTokenSource();
+
+                if (P2EPServer.HiddenServiceIsOn)
+                {
+                    KeepHiddenServiceAlive.Dispose();
+                    KeepHiddenServiceAlive = new CancellationTokenSource();
+                    // wait 20 seconds
+                    for (int i = 0; i < 20; i++)
+                    {
+                        await Task.Delay(1_000); //
+                        if (KeepHiddenServiceAlive.IsCancellationRequested || !P2EPServer.HiddenServiceIsOn) return;
+                    }
+                    await P2EPServer.StopAsync(SleepCts.Token);
+                }
+                Logger.LogDebug($"Global.OnSleeping(): Waiting for a lock");
                 using (await LifeCycleMutex.LockAsync(SleepCts.Token))
                 {
                     #region CriticalSection
@@ -628,7 +644,7 @@ namespace Chaincase.Common
                     // don't ever cancel Init. use an ephemeral token
                     await WaitForInitializationCompletedAsync(new CancellationToken());
 
-                    
+
                     if (TorManager?.State != TorState.Stopped) // OnionBrowser && Dispose@Global
                     {
                         //TorManager.CreateHiddenServiceAsync();

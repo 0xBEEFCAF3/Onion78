@@ -59,7 +59,7 @@ namespace Chaincase.UI.ViewModels
 
         public string BitcoinUri => $"bitcoin:{Address}";
 
-        public string P2EPUri => $"bitcoin:{Address}?pj={Global.P2EPServer.PaymentEndpoint}&amount={ProposedAmount}";
+        public string P2EPUri => $"bitcoin:{Address}?pj={Global.P2EPServer.PaymentEndpoint}";
 
         private double TimeLeft => Global.P2EPTimer.GetTimeLeft();
 

@@ -47,19 +47,15 @@
         <IonList class="ion-padding">
             <IonListHeader>
                 <IonLabel>
-                    Receive Details
+                    Invoice Details
                 </IonLabel>
             </IonListHeader>
-            <IonItem>
-                <IonLabel>Amount</IonLabel>
-                <IonBadge color="secondary" slot="end">₿ @ViewModel.ProposedAmount</IonBadge>
-            </IonItem>
             <IonItem>
                 <IonLabel>Label</IonLabel>
                 <IonBadge slot="end">@ViewModel.AppliedLabel</IonBadge>
             </IonItem>
             <IonItem>
-                <IonLabel>PayJoin Duration</IonLabel>
+                <IonLabel>Expires in</IonLabel>
                 <IonBadge slot="end">@ViewModel.HiddenServiceTimeLeft</IonBadge>
             </IonItem>
         </IonList>

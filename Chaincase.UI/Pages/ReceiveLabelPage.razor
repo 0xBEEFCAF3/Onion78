@@ -1,4 +1,4 @@
-﻿@page "/receive"
+@page "/receive"
 @using Chaincase.UI.Services
 
 @inject IJSRuntime JS
@@ -36,6 +36,7 @@
     private void ApplyLabel()
     {
         ViewModel.InitNextReceiveKey();
+        ViewModel.GenerateP2EP();
         NavigationManager.NavigateTo("receive/address");
     }
 

@@ -45,6 +45,7 @@ namespace Chaincase.UI.ViewModels
 
         public void InitNextReceiveKey()
         {
+            if (ProposedLabel == null) ProposedLabel = "";
             ReceivePubKey = Global.Wallet.KeyManager.GetNextReceiveKey(ProposedLabel, out bool minGapLimitIncreased);
             ProposedLabel = "";
         }

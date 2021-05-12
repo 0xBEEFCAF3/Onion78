@@ -5,6 +5,8 @@
   <img src="https://github.com/armins88/Onion78/raw/master/images/poster.jpg?raw=true" width="300"> 
 </p>
 
+## [🟠 Try Onion 78 PayJoin on TestFlight 👨🏻‍🔬](https://testflight.apple.com/join/Edhp2cXj)
+
 ## Resources
 Presentation -  https://docs.google.com/presentation/d/1RWXk9A7V519o5C2rNhvrHW63b7Iz_Y7oVtujYxDTicI/edit?usp=sharing  
 Figma PoC Mockup - https://www.figma.com/file/FM4jE85Aybr6fT00tyNhWc/Untitled?node-id=0%3A1  

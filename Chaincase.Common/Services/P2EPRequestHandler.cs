@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +29,7 @@ namespace Chaincase.Common.Services
 			NotificationManager = notificationManager;
 		}
 
-		public Task<string> HandleAsync(string body, CancellationToken cancellationToken)
+		public Task<string> HandleAsync(string body, CancellationToken cancellationToken, string password)
 		{
 			if (!PSBT.TryParse(body, Network, out var psbt))
 			{
@@ -56,7 +56,7 @@ namespace Chaincase.Common.Services
 				input.WitScript = WitScript.Empty;
 			}
 			// Get prv key for signature 
-			var serverCoinKey = toUse.KeyManager.GetSecrets("chaincase", toUse.coin.ScriptPubKey).First();
+			var serverCoinKey = toUse.KeyManager.GetSecrets(password, toUse.coin.ScriptPubKey).First();
 			var serverCoin = toUse.coin.GetCoin();
 
 			paymentTx.Inputs.Add(serverCoin.Outpoint);

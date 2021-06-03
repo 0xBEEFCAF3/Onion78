@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using Chaincase.Common;
 using Chaincase.Common.Services;
@@ -15,14 +17,12 @@ namespace Chaincase.UI.ViewModels
     public class ReceiveViewModel : ReactiveObject, INotifyPropertyChanged
     {
         protected Global Global { get; }
-        public string PayJoinValue = "pj";
-        public string DefaultRecieveAddress = "default";
 
+        private bool _isBusy;
         private string _proposedLabel;
         private int _propsedAmount;
         private bool[,] _qrCode;
         private string _requestAmount;
-        private bool _isPayJoining = true;
         private string _receiveType = "pj";
         private string _p2epAddress;
         private string _hiddenServiceExpiration;
@@ -60,22 +60,44 @@ namespace Chaincase.UI.ViewModels
 
         public string BitcoinUri => $"bitcoin:{Address}";
 
-        public string P2EPUri => $"bitcoin:{Address}?pj={Global.P2EPServer.PaymentEndpoint}&amount={ProposedAmount}";
+        public string P2EPUri => $"bitcoin:{Address}?pj={Global.P2EPServer.PaymentEndpoint}";
 
         private double TimeLeft => Global.P2EPTimer.GetTimeLeft();
 
-        public void GenerateP2EP() {
+        public void GenerateP2EP(string password) {
             if (!Global.P2EPServer.HiddenServiceIsOn) {
-                StartPayjoin();
+                StartPayjoin(password);
                 Global.P2EPTimer.StartTimer(180000); // 3 min
             }
             P2EPAddress = Global.P2EPServer.PaymentEndpoint;
         }
 
-        public void StartPayjoin() {
+        public void StartPayjoin(string password) {
             var cts = new CancellationToken();
             Global.P2EPServer.StartAsync(cts);
+            Global.P2EPServer.Password = password;
             Logger.LogInfo($"P2EP Server listening created: {Global.P2EPServer.PaymentEndpoint}");
+        }
+
+        public async Task TryStartPayjoin(string password)
+		{
+            IsBusy = true;
+            string walletFilePath = Path.Combine(Global.WalletManager.WalletDirectories.WalletsDir, $"{Global.Network}.json");
+            try
+            {
+                await Task.Run(() => KeyManager.FromFile(walletFilePath).GetMasterExtKey(password ?? ""));
+                GenerateP2EP(password);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => this.RaiseAndSetIfChanged(ref _isBusy, value);
         }
 
         public string ProposedLabel
@@ -102,11 +124,7 @@ namespace Chaincase.UI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _requestAmount, value);
         }
 
-        public bool IsPayJoining
-        {
-            get => _isPayJoining;
-            set => this.RaiseAndSetIfChanged(ref _isPayJoining, value);
-        }   
+        public bool IsPayjoinLive => Global?.P2EPServer?.HiddenServiceIsOn ?? false;
 
         public string P2EPAddress
         {

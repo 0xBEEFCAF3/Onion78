@@ -61,7 +61,13 @@ namespace Chaincase.Common.Services
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			var handler = new P2EPRequestHandler(Global.Network, Global.WalletManager, 1, Global.NotificationManager);
+<<<<<<< HEAD
+			var handler = new P2EPRequestHandler(Global.Network, Global.WalletManager, 1);
+||||||| 7c7699f58
+			var handler = new P2EPRequestHandler(Global.Network, Global.WalletManager, Global.Config.PrivacyLevelSome);
+=======
+			var handler = new P2EPRequestHandler(Global.Network, Global.WalletManager, Global.Config.PrivacyLevelSome, Global.NotificationManager);
+>>>>>>> 3f4a8aef96f744b9775891c1ed602ee2509b0de2
 
 			while (!stoppingToken.IsCancellationRequested)
 			{

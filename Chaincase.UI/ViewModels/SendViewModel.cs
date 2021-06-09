@@ -97,7 +97,7 @@ namespace Chaincase.UI.ViewModels
                 (amountText) =>
                 {
                     Money.TryParse(amountText.TrimStart('~', ' '), out Money outputAmount);
-                    return outputAmount;
+                    return outputAmount ?? OutputAmount;
                 }).ToProperty(this, x => x.OutputAmount);
 
             this.WhenAnyValue(x => x.IsMax)
@@ -189,7 +189,7 @@ namespace Chaincase.UI.ViewModels
                 {
                     // since AmountText can be altered by hand, we set it instead
                     // of binding to a calculated ObservableAsPropertyHelper
-                    AmountText = url.Amount.ToString();
+                    //AmountText = url.Amount.ToString();
                 }
 
                 // we could check url.Label or url.Message for contact, but there is
@@ -292,11 +292,7 @@ namespace Chaincase.UI.ViewModels
         {
             if (IsMax)
             {
-                AmountText = AllSelectedAmount == Money.Zero
-                    ? EstimatedBtcFee >= AllSelectedAmount
-                        ? "Too high fee"
-                        : "No Coins Selected"
-                    : $"~ {AllSelectedAmount.ToString(false, true)}";
+                AmountText = $"{AllSelectedAmount.ToString(false, true)}";
             }
         }
 
